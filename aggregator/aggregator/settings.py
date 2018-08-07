@@ -25,6 +25,9 @@ SECRET_KEY = 'n^xs9-fu47)r71wei36_z2haiykq&*6h2womc8b0#45nl3hii^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Cross-domen connections
+CORS_ORIGIN_ALLOW_ALL = True
+
 ALLOWED_HOSTS = []
 
 
@@ -38,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Add-ons
+    'corsheaders',
+
     # Custom apps
     'newscollector',
 ]
@@ -50,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Add-ons
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'aggregator.urls'
@@ -122,6 +131,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# Local settings support
 try:
     from .settings_local import *
 except ImportError:
