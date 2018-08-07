@@ -1,2 +1,3 @@
 .vs*
 venv*
+settings_local.py
