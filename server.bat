@@ -24,7 +24,7 @@ IF "%1" == "migrate" (
 )
 
 IF "%1" == "start" (
-    call %0 migrate && call %0 test && call %0 start
+    call %0 migrate && call %0 test && call %0 run
     GOTO:return
 )
 
