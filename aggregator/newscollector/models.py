@@ -5,6 +5,9 @@ class Article(models.Model):
     '''
     News model
     '''
+    # Before changing this first check:
+    # .serializers.article_to_news_dict()
+
     title = models.CharField(
         max_length=255,
         blank=True,
@@ -28,4 +31,6 @@ class Article(models.Model):
 
     class Meta:
         ordering = ['-date']
+        # Before changing this first check:
+        # .base_manager.save_single()
         unique_together = ('title', 'date', 'origin_link', 'link')
