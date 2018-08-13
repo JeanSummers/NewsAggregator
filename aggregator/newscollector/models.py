@@ -7,6 +7,7 @@ class Article(models.Model):
     '''
     # Before changing this first check:
     # .serializers.article_to_news_dict()
+    # .rss_manager parsers
 
     title = models.CharField(
         max_length=255,
@@ -33,4 +34,4 @@ class Article(models.Model):
         ordering = ['-date']
         # Before changing this first check:
         # .base_manager.save_single()
-        unique_together = ('title', 'date', 'origin_link', 'link')
+        unique_together = ('title', 'date', 'link')
