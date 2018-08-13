@@ -8,6 +8,9 @@ from .serializers import articles_to_news_json, article_to_news_json
 import newscollector.rss_manager as rss
 import newscollector.base_manager as base
 
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 def default(request):
     return news_range(request, 0, 10)
@@ -32,6 +35,22 @@ def news_range(request, start, end):
 
 
 def update_database(request):
-    data = rss.from_source('nasa')
+    data = rss.from_sources()
+    data.sort(key=lambda item: item['date'], reverse=True)
     base.save(data)
     return HttpResponse('Database updated!')
+
+
+def news_filtered_range(request, start, end, data):
+    import base64
+    decoded = base64.b64decode(data).decode("utf-8")
+    strings = json.loads(decoded)
+    articles = base.get_filtered_range(start, end, strings)
+    jstr = articles_to_news_json(articles)
+    return HttpResponse(jstr)
+
+
+def test(request):
+    data = rss.from_sources('nasa', 'times_sport')
+    data.sort(key=lambda item: item['date'], reverse=True)
+    return HttpResponse(json.dumps(data, ensure_ascii=False, cls=DjangoJSONEncoder), content_type='application/json')

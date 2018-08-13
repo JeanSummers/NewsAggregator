@@ -14,6 +14,9 @@ or Articles in given range
 
 from .models import Article
 
+# Fast save
+from django.db import transaction
+
 
 def save(news):
     if type(news) is list:
@@ -22,6 +25,7 @@ def save(news):
         save_single(news)
 
 
+@transaction.atomic  # Fast save
 def save_list(news: list):
     for article in news:
         save_single(article)
@@ -33,7 +37,6 @@ def save_single(article: dict):
     new, created = Article.objects.get_or_create(
         title=article['title'],
         date=article['date'],
-        origin_link=article['origin_link'],
         link=article['link']
     )
     # shallow copy of article dict
@@ -66,8 +69,43 @@ def get_single(id):
 
 def get_range(start, end):
     try:
-        result = Article.objects.filter(id__gte=start, id__lte=end)
+        result = Article.objects.all()[int(start): int(end)]
     except:
         return []
 
     return result
+
+
+def get_filtered_range(start, end, filters: list):
+    articles = Article.objects.all()
+
+    lowcased = [item.lower() for item in filters]
+
+    '''
+    matches = []
+    for pattern in lowcased:
+        matches.append(
+            articles.filter(title__icontains=pattern) |
+            articles.filter(content_short__icontains=pattern))
+
+    print(matches)
+    result = Article.objects.none()
+    for match in matches:
+        result = result | match
+    '''
+
+    articles = list(articles)
+    articles = list(filter(
+        lambda item: match_any(
+            [item.title.lower(), item.content_short.lower()], lowcased),
+        articles))
+
+    return articles[int(start): int(end)]
+
+
+def match_any(items, patterns):
+    for item in items:
+        for pattern in patterns:
+            if item.find(pattern) != -1:
+                return True
+    return False
