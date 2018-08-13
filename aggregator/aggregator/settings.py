@@ -23,12 +23,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'n^xs9-fu47)r71wei36_z2haiykq&*6h2womc8b0#45nl3hii^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Non-false value must be set in the settings_local.py
+DEBUG = False
 
 # Cross-domen connections
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = []
+# Production server ip here
+# Local ip must be set in settings_local.py
+ALLOWED_HOSTS = [
+    # !!! SHALL NOT BE EMPTY !!!
+]
 
 
 # Application definition

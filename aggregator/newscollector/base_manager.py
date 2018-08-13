@@ -88,7 +88,6 @@ def get_filtered_range(start, end, filters: list):
             articles.filter(title__icontains=pattern) |
             articles.filter(content_short__icontains=pattern))
 
-    print(matches)
     result = Article.objects.none()
     for match in matches:
         result = result | match

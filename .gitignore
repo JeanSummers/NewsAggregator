@@ -1,5 +1,6 @@
 .vs*
 venv*
-settings_local.py
 db.*
 *__pycache__*
+settings_local.py
+config.bat
