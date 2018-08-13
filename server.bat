@@ -24,7 +24,8 @@ IF "%1" == "migrate" (
 )
 
 IF "%1" == "start" (
-    call %0 migrate && call %0 test && call %0 run
+    env start 
+    call %0 migrate && call %0 test && call %0 manage runserver localhost:8001
     GOTO:return
 )
 
