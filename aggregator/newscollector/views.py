@@ -5,7 +5,7 @@ Handlers for http-requests
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 from .serializers import articles_to_news_json, article_to_news_json
-import newscollector.rss_manager as rss
+import newscollector.source_getter as source
 import newscollector.base_manager as base
 
 import json
@@ -35,7 +35,7 @@ def news_range(request, start, end):
 
 
 def update_database(request):
-    data = rss.from_sources()
+    data = source.all()
     data.sort(key=lambda item: item['date'], reverse=True)
     base.save(data)
     return HttpResponse('Database updated!')
@@ -51,6 +51,4 @@ def news_filtered_range(request, start, end, data):
 
 
 def test(request):
-    data = rss.from_sources('nasa', 'times_sport')
-    data.sort(key=lambda item: item['date'], reverse=True)
-    return HttpResponse(json.dumps(data, ensure_ascii=False, cls=DjangoJSONEncoder), content_type='application/json')
+    return HttpResponse('<h1>This is test page</h1>')

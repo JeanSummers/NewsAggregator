@@ -23,9 +23,9 @@ def article_to_news_dict(article: Article):
     return {
         'id': article.id,
         'heading': article.title,
-        'thumbnail': article.thumbnail,
+        'thumbnail': article.thumbnail or article.source.image,
         'description': article.content_short,
-        'text': article.content_short,
+        'text': '',
         'link': article.link,
         'date': article.date,
         'views_count': 0,

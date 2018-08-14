@@ -34,13 +34,12 @@ def save_list(news: list):
 def save_single(article: dict):
     if article is None:
         return
-    new, created = Article.objects.get_or_create(
+    new, _ = Article.objects.get_or_create(
+        defaults=article,
         title=article['title'],
         date=article['date'],
-        link=article['link']
-    )
-    # shallow copy of article dict
-    new.__dict__.update(article)
+        link=article['link'])
+
     new.save()
 
 
@@ -55,43 +54,30 @@ def get(pattern=None):
 
 
 def get_all():
-    return Article.objects.all()
+    try:
+        return Article.objects.all()
+    except:
+        return []
 
 
 def get_single(id):
     try:
-        result = Article.objects.get(id=id)
+        return Article.objects.get(id=id)
     except:
         return None
-
-    return result
 
 
 def get_range(start, end):
     try:
-        result = Article.objects.all()[int(start): int(end)]
+        return Article.objects.all()[int(start): int(end)]
     except:
         return []
-
-    return result
 
 
 def get_filtered_range(start, end, filters: list):
     articles = Article.objects.all()
 
     lowcased = [item.lower() for item in filters]
-
-    '''
-    matches = []
-    for pattern in lowcased:
-        matches.append(
-            articles.filter(title__icontains=pattern) |
-            articles.filter(content_short__icontains=pattern))
-
-    result = Article.objects.none()
-    for match in matches:
-        result = result | match
-    '''
 
     articles = list(articles)
     articles = list(filter(
