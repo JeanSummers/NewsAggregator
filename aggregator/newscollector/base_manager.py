@@ -1,11 +1,15 @@
 '''
 Database handlers
+-----------------
 
-save()
+save(dict | list<dict>)
+
 accepts dicts or list of dicts
 with fields named as Article fields
 
-get()
+
+get(empty | id | list[2])
+
 retrieves all Articles,
 article by id
 or Articles in given range

@@ -31,8 +31,8 @@ def news_range(request, start, end):
 
 
 def update_database(request):
-    import newscollector.tasks as tasks
-    tasks.update_database()
+    import newscollector.common as common
+    common.update_database()
     return HttpResponse('Database updated!')
 
 

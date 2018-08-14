@@ -8,8 +8,8 @@ set manageRun=python %managePath%
 
 rem Production server ip and port here
 rem local address must be set in config.bat
-set apiIP=INVALID
-set apiPORT=INVALID
+set apiIP=ENTER_IP_HERE
+set apiPORT=ENTER_PORT_HERE
 
 IF EXIST config.bat call config
 
@@ -21,6 +21,7 @@ IF "%1" == "run" (
 IF "%1" == "test" (
     rem No tests yet
     rem %manageRun% test "appname"
+    ECHO TESTED
     GOTO:return
 )
 
@@ -34,6 +35,7 @@ IF "%1" == "start" (
     env start 
     call %0 migrate && ^
 call %0 test && ^
+call %0 sheduler && ^
 call %0 manage runserver %apiIP%:%apiPORT%
 
     GOTO:return
@@ -47,6 +49,15 @@ IF "%1" == "shell" (
 if "%1" == "manage" (
     rem Pass rest arguments to manage.py
     %manageRun% %2 %3 %4 %5 %6 %7 %8 %9
+    GOTO:return
+)
+
+if "%1" == "sheduler" (
+    cd aggregator
+    del celerybeat.pid
+    start celery -A aggregator beat -l debug
+    start celery -A aggregator worker -l debug
+    cd ..
     GOTO:return
 )
 
@@ -70,7 +81,7 @@ ECHO Usage:
 ECHO %0 run
 ECHO     Fast server start
 ECHO %0 start
-ECHO     Migrate, run tests and start
+ECHO     Migrate, run sheduler, tests and start
 ECHO %0 test
 ECHO     Run all tests
 ECHO %0 migrate
@@ -79,6 +90,8 @@ ECHO %0 shell
 ECHO     Opens django shell
 ECHO %0 manage
 ECHO     Call manage.py directly
+ECHO %0 sheduler
+ECHO     Runs celery instance
 
 
 :return
