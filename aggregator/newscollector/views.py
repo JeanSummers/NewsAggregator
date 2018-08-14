@@ -2,14 +2,10 @@
 Handlers for http-requests
 '''
 
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse
 
 from .serializers import articles_to_news_json, article_to_news_json
-import newscollector.source_getter as source
 import newscollector.base_manager as base
-
-import json
-from django.core.serializers.json import DjangoJSONEncoder
 
 
 def default(request):
@@ -35,14 +31,15 @@ def news_range(request, start, end):
 
 
 def update_database(request):
-    data = source.all()
-    data.sort(key=lambda item: item['date'], reverse=True)
-    base.save(data)
+    import newscollector.tasks as tasks
+    tasks.update_database()
     return HttpResponse('Database updated!')
 
 
 def news_filtered_range(request, start, end, data):
     import base64
+    import json
+    from django.core.serializers.json import DjangoJSONEncoder
     decoded = base64.b64decode(data).decode("utf-8")
     strings = json.loads(decoded)
     articles = base.get_filtered_range(start, end, strings)

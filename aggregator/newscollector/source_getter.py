@@ -7,6 +7,7 @@ def all(*sources):
     '''
     Collects data by appropriate handlers
     or returns empty array
+
     Output list of Article-like dictionaries
     '''
     array = sources
@@ -25,6 +26,7 @@ def single(source: NewsSource):
     '''
     Collects data by appropriate handler
     or returns empty array
+
     Output Article-like dictionary
     '''
     source_type = source.source_type
