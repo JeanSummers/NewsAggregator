@@ -21,11 +21,7 @@ set apiPORT=8001
 И задать локальные настройки django в файле settings_local.py
 ```
 DEBUG = True
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
 ```
-
-Строчка **CELERY_BROKER_URL** это url для подключения к работающему серверу redis.
-Если такой отсутствует, нужно установить redis на локальной машине
 
 После этого можно запустить сервер командой
 
