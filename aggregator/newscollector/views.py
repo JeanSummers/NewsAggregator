@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from .serializers import articles_to_news_json, article_to_news_json
 import newscollector.base_manager as base
 
+import base64
+import json
+
+import newscollector.handlers.google_api as api
+
 
 def default(request):
     return news_range(request, 0, 10)
@@ -37,9 +42,6 @@ def update_database(request):
 
 
 def news_filtered_range(request, start, end, data):
-    import base64
-    import json
-    from django.core.serializers.json import DjangoJSONEncoder
     decoded = base64.b64decode(data).decode("utf-8")
     strings = json.loads(decoded)
     articles = base.get_filtered_range(start, end, strings)
@@ -48,4 +50,20 @@ def news_filtered_range(request, start, end, data):
 
 
 def test(request):
-    return HttpResponse('<h1>This is test page</h1>')
+    return HttpResponse(api.all(), content_type='application/json', charset='utf-8')
+
+
+def news_every(request, start, end):
+    pageSize = int(end) - int(start)
+    page = int(end) // pageSize
+    result = api.every(page, pageSize)
+    return HttpResponse(result)
+
+
+def news_tagged(request, start, end, coded_tags):
+    decoded_tags = base64.b64decode(coded_tags).decode("utf-8")
+    tags = json.loads(decoded_tags)
+    pageSize = int(end) - int(start)
+    page = int(end) // pageSize
+    result = api.every(page, pageSize, tags)
+    return HttpResponse(result)
