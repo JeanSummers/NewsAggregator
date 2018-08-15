@@ -32,6 +32,7 @@ def cleanhtml(raw_html):
 
 
 def ask_for(url):
+    print(url)
     response = requests.get(url)
     if response.status_code != 200:
         return []
@@ -72,13 +73,14 @@ def format_articles(articles):
 
 
 def every(page, pageSize, filters=[]):
+    query = ' OR '.join(filters)
     tags = ''
-    for tag in filters:
-        tags += tag + ' AND '
+    if query:
+        tags = '(' + query + ') AND '
 
     url = makeUrl(
         endpoint='everything',
-        q=tags + '(business OR финансы OR бизнес)',
+        q=tags + '(business OR финанс OR бизнес)',
         language='ru',
         page=str(page),
         pageSize=str(pageSize),

@@ -12,8 +12,7 @@ import newscollector.base_manager as base
 
 
 def update_database():
-    print('update_database placeholder fired!')
-    return  # placeholder
     data = source.all()
     data.sort(key=lambda item: item['date'], reverse=True)
     base.save(data)
+    print('Database updated!')
