@@ -32,7 +32,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Production server ip here
 # Local ip must be set in settings_local.py
 ALLOWED_HOSTS = [
-    '142.93.114.144'
+    '142.93.114.144',
+    'pro-retail.info',
+    'www.pro-retail.info',
 ]
 
 

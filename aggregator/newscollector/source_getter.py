@@ -18,7 +18,10 @@ def all(*sources):
     for source in array:
         data = single(source)
         result.extend(data)
-        print('Processed ', source)
+        if not result:
+            print(source, 'Unavailable!')
+        else:
+            print('Processed ', source)
     return result
 
 

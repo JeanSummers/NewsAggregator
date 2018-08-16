@@ -79,6 +79,7 @@ def get_range(start, end):
 
 
 def get_filtered_range(start, end, filters: list):
+    print(filters)
     articles = Article.objects.all()
 
     lowcased = [item.lower() for item in filters]
